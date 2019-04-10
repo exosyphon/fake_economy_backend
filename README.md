@@ -1,4 +1,4 @@
-# FakeEconomyBackend
+# FakeEconomyBackend [![Build Status](https://travis-ci.org/exosyphon/fake_economy_backend.svg?branch=master)](https://travis-ci.org/exosyphon/fake_economy_backend)
 
 To start your Phoenix server:
 
