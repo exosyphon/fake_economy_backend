@@ -13,13 +13,15 @@ defmodule FakeEconomyBackendWeb.Router do
     plug :accepts, ["json"]
   end
 
-  scope "/api" do
-    pipe_through :api
-
-    forward "/graphiql", Absinthe.Plug.GraphiQL,
-      schema: FakeEconomyBackendWeb.Schema
-
-    forward "/", Absinthe.Plug,
-      schema: FakeEconomyBackendWeb.Schema
+  pipeline :graphql do
+    plug FakeEconomyBackendWeb.Context
   end
+
+  scope "/api" do
+    pipe_through :graphql
+
+    forward "/", Absinthe.Plug, schema: FakeEconomyBackendWeb.Schema
+  end
+
+  forward "/graphiql", Absinthe.Plug.GraphiQL, schema: FakeEconomyBackendWeb.Schema
 end

@@ -22,6 +22,10 @@ config :logger, :console,
   format: "$time $metadata[$level] $message\n",
   metadata: [:request_id]
 
+config :fake_economy_backend, FakeEconomyBackend.Guardian,
+  issuer: "fake_economy_backend",
+  secret_key: "8nUH6xvVcjPVegCs2rDzfyeuTf0yhQ5NVPzAo5TZg56y7tmNW2+Y9Mm+5DGyvo9o"
+
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
 
