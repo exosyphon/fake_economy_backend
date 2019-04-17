@@ -2,6 +2,7 @@ defmodule FakeEconomyBackend.Accounts.User do
   use Ecto.Schema
   import Ecto.Changeset
   alias FakeEconomyBackend.Accounts.User
+  alias FakeEconomyBackend.FinancialAccount
   alias FakeEconomyBackend.Repo
 
   schema "users" do
@@ -11,13 +12,14 @@ defmodule FakeEconomyBackend.Accounts.User do
     field :token, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    has_many :financial_accounts, FinancialAccount
 
     timestamps()
   end
 
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name, :email, :token])
+    |> cast(attrs, [:first_name, :last_name, :email])
     |> validate_required([:first_name, :last_name, :email])
   end
 
@@ -33,6 +35,11 @@ defmodule FakeEconomyBackend.Accounts.User do
     |> cast(params, [:first_name, :last_name, :email, :password])
     |> validate_required([:first_name, :last_name, :email, :password])
     |> put_pass_hash()
+  end
+
+  def remove_token_changeset(%User{} = user, attrs) do
+    user
+    |> cast(attrs, [:token])
   end
 
   def store_token_changeset(%User{} = user, params \\ %{}) do
@@ -61,7 +68,7 @@ defmodule FakeEconomyBackend.Accounts.User do
 
   def logout(params) do
     Repo.get_by(User, email: String.downcase(params.email))
-    |> User.changeset(%{token: nil})
+    |> User.remove_token_changeset(%{token: nil})
     |> Repo.update!()
   end
 

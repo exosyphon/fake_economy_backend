@@ -15,6 +15,13 @@ defmodule FakeEconomyBackendWeb.Schema.Types do
     field :email, :string
   end
 
+  object :financial_account do
+    field :id, :id
+    field :currency, :string
+    field :balance, :integer
+    field :type, :string
+  end
+
   object :session do
     field :token, :string
   end

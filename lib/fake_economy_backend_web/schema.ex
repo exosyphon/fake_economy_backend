@@ -9,6 +9,11 @@ defmodule FakeEconomyBackendWeb.Schema do
     field :posts, list_of(:string) do
       resolve(&Resolvers.Content.list_posts/2)
     end
+
+    @desc "Get all financial accounts"
+    field :financial_accounts, type: list_of(:financial_account) do
+      resolve(&Resolvers.FinancialAccount.all/2)
+    end
   end
 
   mutation do
