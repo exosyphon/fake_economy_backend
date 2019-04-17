@@ -15,13 +15,9 @@ defmodule FakeEconomyBackend.Accounts.User do
     timestamps()
   end
 
-  @spec changeset(
-          FakeEconomyBackend.Accounts.User.t(),
-          :invalid | %{optional(:__struct__) => none(), optional(atom() | binary()) => any()}
-        ) :: Ecto.Changeset.t()
   def changeset(%User{} = user, attrs) do
     user
-    |> cast(attrs, [:first_name, :last_name, :email])
+    |> cast(attrs, [:first_name, :last_name, :email, :token])
     |> validate_required([:first_name, :last_name, :email])
   end
 
@@ -61,6 +57,12 @@ defmodule FakeEconomyBackend.Accounts.User do
       true -> {:ok, user}
       _ -> {:error, "Incorrect login credentials"}
     end
+  end
+
+  def logout(params) do
+    Repo.get_by(User, email: String.downcase(params.email))
+    |> User.changeset(%{token: nil})
+    |> Repo.update!()
   end
 
   defp check_password(user, password) do

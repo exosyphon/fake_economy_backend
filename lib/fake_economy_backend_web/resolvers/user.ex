@@ -21,4 +21,9 @@ defmodule FakeEconomyBackendWeb.Resolvers.User do
       {:ok, %{token: jwt}}
     end
   end
+
+  def logout(params, _info) do
+    FakeEconomyBackend.Accounts.User.logout(params)
+    {:ok, true}
+  end
 end

@@ -12,6 +12,7 @@ defmodule FakeEconomyBackendWeb.Schema do
   end
 
   mutation do
+    @desc "Update user values"
     field :update_user, type: :user do
       arg(:id, non_null(:integer))
       arg(:user, :update_user_params)
@@ -19,11 +20,19 @@ defmodule FakeEconomyBackendWeb.Schema do
       resolve(&Resolvers.User.update/2)
     end
 
+    @desc "Login"
     field :login, type: :session do
       arg :email, non_null(:string)
       arg :password, non_null(:string)
 
       resolve &Resolvers.User.login/2
+    end
+
+    @desc "Logout"
+    field :logout, type: :boolean do
+      arg :email, non_null(:string)
+
+      resolve &Resolvers.User.logout/2
     end
   end
 end

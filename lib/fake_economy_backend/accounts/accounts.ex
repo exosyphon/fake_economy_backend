@@ -26,12 +26,4 @@ defmodule FakeEconomyBackend.Accounts do
     |> User.store_token_changeset(%{token: token})
     |> Repo.update()
   end
-
-  def delete_user(%User{} = user) do
-    Repo.delete(user)
-  end
-
-  def change_user(%User{} = user) do
-    User.changeset(user, %{})
-  end
 end
