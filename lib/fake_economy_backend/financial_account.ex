@@ -6,7 +6,7 @@ defmodule FakeEconomyBackend.FinancialAccount do
     field :balance, :integer
     field :currency, :string
     field :type, :string
-    belongs_to :user, User
+    belongs_to :user, FakeEconomyBackend.Accounts.User
 
     timestamps()
   end
