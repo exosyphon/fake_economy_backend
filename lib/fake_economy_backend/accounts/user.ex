@@ -17,20 +17,15 @@ defmodule FakeEconomyBackend.Accounts.User do
     timestamps()
   end
 
-  def changeset(%User{} = user, attrs) do
+  def changeset(%User{} = user, attrs \\ %{}) do
     user
-    |> cast(attrs, [:first_name, :last_name, :email])
-    |> validate_required([:first_name, :last_name, :email])
+    |> cast(attrs, [:email, :password])
+    |> validate_required([:email, :password])
+    |> cast_assoc(:financial_accounts)
+    |> add_new_pass_hash()
   end
 
   def update_changeset(%User{} = user, params \\ %{}) do
-    user
-    |> cast(params, [:first_name, :last_name, :email, :password])
-    |> validate_required([:first_name, :last_name, :email, :password])
-    |> put_pass_hash()
-  end
-
-  def registration_changeset(%User{} = user, params \\ %{}) do
     user
     |> cast(params, [:first_name, :last_name, :email, :password])
     |> validate_required([:first_name, :last_name, :email, :password])
@@ -47,6 +42,15 @@ defmodule FakeEconomyBackend.Accounts.User do
     |> cast(params, [:token])
     |> validate_required([:token])
     |> put_pass_hash()
+  end
+
+  defp add_new_pass_hash(changeset) do
+    case changeset do
+      %Ecto.Changeset{valid?: true, changes: %{password: password}} ->
+        change(changeset, Bcrypt.add_hash(password))
+      _ ->
+        changeset
+    end
   end
 
   defp put_pass_hash(changeset) do

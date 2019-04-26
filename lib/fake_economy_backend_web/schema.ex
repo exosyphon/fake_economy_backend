@@ -17,6 +17,13 @@ defmodule FakeEconomyBackendWeb.Schema do
   end
 
   mutation do
+    @desc "Create user account"
+    field :create_user, type: :user do
+      arg(:user, :create_user_params)
+
+      resolve(&Resolvers.User.create/2)
+    end
+
     @desc "Update user values"
     field :update_user, type: :user do
       arg(:id, non_null(:integer))

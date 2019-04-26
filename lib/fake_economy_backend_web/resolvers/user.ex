@@ -14,6 +14,13 @@ defmodule FakeEconomyBackendWeb.Resolvers.User do
     |> Accounts.update_user(user_params)
   end
 
+  def create(%{user: user_params}, _info) do
+    case Accounts.existing_user?(user_params) do
+      nil -> Accounts.create_user(user_params)
+      _ -> {:error, "User already exists!"}
+    end
+  end
+
   def login(params, _info) do
     with {:ok, user} <- Accounts.User.authenticate(params),
          {:ok, jwt, _ } <- Guardian.encode_and_sign(user),

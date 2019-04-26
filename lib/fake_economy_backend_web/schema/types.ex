@@ -1,6 +1,11 @@
 defmodule FakeEconomyBackendWeb.Schema.Types do
   use Absinthe.Schema.Notation
 
+  input_object :create_user_params do
+    field :email, :string
+    field :password, :string
+  end
+
   input_object :update_user_params do
     field :first_name, :string
     field :last_name, :string
