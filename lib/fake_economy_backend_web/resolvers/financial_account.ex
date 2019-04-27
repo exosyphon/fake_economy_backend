@@ -4,7 +4,7 @@ defmodule FakeEconomyBackendWeb.Resolvers.FinancialAccount do
   alias FakeEconomyBackend.Repo
 
   def all(_args, %{context: %{current_user: %{id: id}}}) do
-    {:ok, Repo.all(FinancialAccount, user_id: id) }
+    {:ok, Repo.all(from(f in FinancialAccount, where: f.user_id == ^id))}
   end
 
   def all(_args, _info) do
