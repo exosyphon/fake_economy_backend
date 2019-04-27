@@ -48,6 +48,7 @@ defmodule FakeEconomyBackend.MixProject do
       {:absinthe_phoenix, "~> 1.4.0"},
       {:guardian, "~> 1.2"},
       {:bcrypt_elixir, "~> 2.0"},
+      {:elixir_uuid, "~> 1.2"}
     ]
   end
 

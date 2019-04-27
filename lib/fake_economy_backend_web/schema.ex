@@ -24,6 +24,30 @@ defmodule FakeEconomyBackendWeb.Schema do
       resolve(&Resolvers.User.create/2)
     end
 
+    @desc "Forgot password"
+    field :forgot_password, type: :string do
+      arg :email, non_null(:string)
+
+      resolve(&Resolvers.User.forgot_password/2)
+    end
+
+    @desc "Reset password"
+    field :reset_password, type: :boolean do
+      arg :reset_token, non_null(:string)
+      arg :password, non_null(:string)
+      arg :password_confirmation, non_null(:string)
+
+      resolve(&Resolvers.User.reset_password/2)
+    end
+
+    @desc "Update password"
+    field :update_password, type: :boolean do
+      arg :password, non_null(:string)
+      arg :password_confirmation, non_null(:string)
+
+      resolve(&Resolvers.User.update_password/2)
+    end
+
     @desc "Update user values"
     field :update_user, type: :user do
       arg(:id, non_null(:integer))

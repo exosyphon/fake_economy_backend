@@ -12,12 +12,13 @@ defmodule FakeEconomyBackend.Accounts.User do
     field :token, :string
     field :password, :string, virtual: true
     field :password_hash, :string
+    field :reset_token, :string
     has_many :financial_accounts, FinancialAccount
 
     timestamps()
   end
 
-  def changeset(%User{} = user, attrs \\ %{}) do
+  def create_changeset(%User{} = user, attrs \\ %{}) do
     user
     |> cast(attrs, [:email, :password])
     |> validate_required([:email, :password])
@@ -27,9 +28,16 @@ defmodule FakeEconomyBackend.Accounts.User do
 
   def update_changeset(%User{} = user, params \\ %{}) do
     user
-    |> cast(params, [:first_name, :last_name, :email, :password])
-    |> validate_required([:first_name, :last_name, :email, :password])
+    |> cast(params, [:first_name, :last_name, :email])
+    |> validate_required([:email])
     |> put_pass_hash()
+  end
+
+  def update_password_changeset(%User{} = user, params \\ %{}) do
+    user
+    |> cast(params, [:password, :reset_token])
+    |> validate_required([:password])
+    |> add_new_pass_hash()
   end
 
   def remove_token_changeset(%User{} = user, attrs) do
@@ -37,11 +45,15 @@ defmodule FakeEconomyBackend.Accounts.User do
     |> cast(attrs, [:token])
   end
 
+  def reset_password_changeset(%User{} = user, reset_token) do
+    user
+    |> cast(%{token: nil, password_hash: "", reset_token: reset_token}, [:token, :password_hash, :reset_token])
+  end
+
   def store_token_changeset(%User{} = user, params \\ %{}) do
     user
     |> cast(params, [:token])
     |> validate_required([:token])
-    |> put_pass_hash()
   end
 
   defp add_new_pass_hash(changeset) do
@@ -79,7 +91,10 @@ defmodule FakeEconomyBackend.Accounts.User do
   defp check_password(user, password) do
     case user do
       nil -> false
-      _ -> Bcrypt.verify_pass(password, user.password_hash)
+      _ -> case user.password_hash do
+        nil -> false
+        _ -> Bcrypt.verify_pass(password, user.password_hash)
+      end
     end
   end
 end
