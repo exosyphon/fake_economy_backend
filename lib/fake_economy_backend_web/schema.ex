@@ -5,9 +5,9 @@ defmodule FakeEconomyBackendWeb.Schema do
   alias FakeEconomyBackendWeb.Resolvers
 
   query do
-    @desc "Get all posts"
-    field :posts, list_of(:string) do
-      resolve(&Resolvers.Content.list_posts/2)
+    @desc "Get all jobs"
+    field :jobs, list_of(:job) do
+      resolve(&Resolvers.Job.all/2)
     end
 
     @desc "Get all financial accounts"

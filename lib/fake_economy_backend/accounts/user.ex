@@ -3,6 +3,7 @@ defmodule FakeEconomyBackend.Accounts.User do
   import Ecto.Changeset
   alias FakeEconomyBackend.Accounts.User
   alias FakeEconomyBackend.FinancialAccount
+  alias FakeEconomyBackend.Job
   alias FakeEconomyBackend.Repo
 
   schema "users" do
@@ -14,6 +15,7 @@ defmodule FakeEconomyBackend.Accounts.User do
     field :password_hash, :string
     field :reset_token, :string
     has_many :financial_accounts, FinancialAccount
+    has_many :jobs, Job
 
     timestamps()
   end

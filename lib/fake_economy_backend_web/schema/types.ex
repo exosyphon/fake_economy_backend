@@ -32,6 +32,14 @@ defmodule FakeEconomyBackendWeb.Schema.Types do
     field :type, :string
   end
 
+  object :job do
+    field :id, :id
+    field :pay_period, :string
+    field :title, :string
+    field :salary, :integer
+    field :type, :string
+  end
+
   object :session do
     field :token, :string
   end
